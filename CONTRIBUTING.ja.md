@@ -32,9 +32,9 @@ pip install -e ".[dev]"
 
 ## 評価基準の追加
 
-1. `src/chat_eval/criteria/` に新しいファイルを作成（例: `my_criterion.py`）
+1. `src/souk/criteria/` に新しいファイルを作成（例: `my_criterion.py`）
 2. **3言語すべて** に対して `Criterion` オブジェクトを定義: `en`, `ja`, `zh`
-3. `src/chat_eval/criteria/registry.py` に登録
+3. `src/souk/criteria/registry.py` に登録
 4. `tests/test_criteria.py` にテストを追加
 
 ## テストケースの追加

@@ -32,9 +32,9 @@ pip install -e ".[dev]"
 
 ## Adding Evaluation Criteria
 
-1. Create a new file in `src/chat_eval/criteria/` (e.g., `my_criterion.py`)
+1. Create a new file in `src/souk/criteria/` (e.g., `my_criterion.py`)
 2. Define `Criterion` objects for **all three languages**: `en`, `ja`, `zh`
-3. Register them in `src/chat_eval/criteria/registry.py`
+3. Register them in `src/souk/criteria/registry.py`
 4. Add tests in `tests/test_criteria.py`
 
 ## Adding Test Cases

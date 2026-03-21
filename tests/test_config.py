@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from chat_eval.config import EvalConfig, JudgeConfig, load_config
+from souk.config import EvalConfig, JudgeConfig, load_config
 
 CONFIG_EXAMPLE = Path(__file__).parent.parent / "config.example.yaml"
 

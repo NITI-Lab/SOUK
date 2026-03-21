@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/assets/logo.png" alt="SOUK" width="200" />
+
 # SOUK
 
 **评估电商产品推荐聊天质量的开源基准**
@@ -82,22 +84,9 @@ docker compose up souk
 
 ## 工作原理
 
-```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│   测试用例    │────▶│  SOUK Runner │────▶│    报告      │
-│   (YAML)     │     │              │     │  HTML/JSON   │
-└─────────────┘     │  ┌─────────┐ │     └─────────────┘
-                     │  │ 评委 1  │ │
-┌─────────────┐     │  │  (GPT)  │ │
-│    目标       │────▶│  ├─────────┤ │
-│  （可选）      │     │  │ 评委 2  │ │
-│  实时聊天     │     │  │ (Claude)│ │
-└─────────────┘     │  ├─────────┤ │
-                     │  │ 评委 3  │ │
-                     │  │(Gemini) │ │
-                     │  └─────────┘ │
-                     └──────────────┘
-```
+<p align="center">
+  <img src="docs/assets/architecture-zh.png" alt="SOUK 架构" width="600" />
+</p>
 
 1. 从 YAML 文件**加载**测试用例（静态对话或实时用户回合）
 2. 通过多个 AI 评委模型**运行**每个对话
@@ -159,7 +148,7 @@ user_turns:
 SOUK 可以作为 MCP 服务器运行，与 AI 编码工具集成：
 
 ```bash
-python -m chat_eval.mcp.server
+python -m souk.mcp.server
 ```
 
 ## Star History

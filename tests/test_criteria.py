@@ -1,6 +1,6 @@
 """Tests for criteria registry."""
 
-from chat_eval.criteria import get_criterion, list_criteria
+from souk.criteria import get_criterion, list_criteria
 
 ALL_CRITERIA = [
     "naturalness",

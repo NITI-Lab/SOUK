@@ -23,7 +23,7 @@ docker compose up souk
 ```
 
 ## Architecture
-- `src/chat_eval/` - Core Python package
+- `src/souk/` - Core Python package
   - `cli.py` - Click CLI entry point
   - `config.py` - Pydantic config models
   - `runner.py` - Evaluation orchestrator
@@ -37,4 +37,4 @@ docker compose up souk
 ## Conventions
 - All evaluation criteria must support three languages: en, ja, zh
 - Test cases are YAML with required fields: id, name, language, category, criteria
-- CLI entry point is `souk` (mapped to `chat_eval.cli:main`)
+- CLI entry point is `souk` (mapped to `souk.cli:main`)

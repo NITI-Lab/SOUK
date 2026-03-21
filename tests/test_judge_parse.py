@@ -1,7 +1,7 @@
 """Tests for judge response parsing."""
 
-from chat_eval.config import JudgeConfig
-from chat_eval.judges.base import JudgeBase, JudgeResult
+from souk.config import JudgeConfig
+from souk.judges.base import JudgeBase, JudgeResult
 
 
 class MockJudge(JudgeBase):

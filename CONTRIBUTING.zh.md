@@ -32,9 +32,9 @@ pip install -e ".[dev]"
 
 ## 添加评估标准
 
-1. 在 `src/chat_eval/criteria/` 中创建新文件（例如 `my_criterion.py`）
+1. 在 `src/souk/criteria/` 中创建新文件（例如 `my_criterion.py`）
 2. 为**所有三种语言**定义 `Criterion` 对象: `en`, `ja`, `zh`
-3. 在 `src/chat_eval/criteria/registry.py` 中注册
+3. 在 `src/souk/criteria/registry.py` 中注册
 4. 在 `tests/test_criteria.py` 中添加测试
 
 ## 添加测试用例

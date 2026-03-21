@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/assets/logo.png" alt="SOUK" width="200" />
+
 # SOUK
 
 **EC商品推薦チャットの品質を評価するオープンソースベンチマーク**
@@ -82,22 +84,9 @@ docker compose up souk
 
 ## 仕組み
 
-```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│ テストケース  │────▶│  SOUK Runner │────▶│   レポート    │
-│  (YAML)      │     │              │     │  HTML/JSON   │
-└─────────────┘     │  ┌─────────┐ │     └─────────────┘
-                     │  │ジャッジ1 │ │
-┌─────────────┐     │  │  (GPT)  │ │
-│  ターゲット   │────▶│  ├─────────┤ │
-│ （オプション） │     │  │ジャッジ2 │ │
-│  ライブチャット│     │  │ (Claude)│ │
-└─────────────┘     │  ├─────────┤ │
-                     │  │ジャッジ3 │ │
-                     │  │(Gemini) │ │
-                     │  └─────────┘ │
-                     └──────────────┘
-```
+<p align="center">
+  <img src="docs/assets/architecture-ja.png" alt="SOUK アーキテクチャ" width="600" />
+</p>
 
 1. YAMLファイルからテストケースを**ロード**（静的な会話またはライブのユーザーターン）
 2. 各会話を複数のAIジャッジモデルで**実行**
@@ -159,7 +148,7 @@ user_turns:
 SOUKはMCPサーバーとして動作し、AIコーディングツールと統合できます：
 
 ```bash
-python -m chat_eval.mcp.server
+python -m souk.mcp.server
 ```
 
 ## Star History

@@ -58,7 +58,7 @@ config.*.yaml
 # ===========================
 reports/
 *.html
-!src/chat_eval/report/templates/report.html
+!src/souk/report/templates/report.html
 
 # ===========================
 # Testing & coverage

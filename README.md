@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/assets/logo.png" alt="SOUK" width="200" />
+
 # SOUK
 
 **Open-source benchmark for evaluating EC product recommendation chat quality**
@@ -82,22 +84,9 @@ docker compose up souk
 
 ## How It Works
 
-```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│  Test Cases  │────▶│  SOUK Runner │────▶│   Reports   │
-│  (YAML)      │     │              │     │  HTML/JSON   │
-└─────────────┘     │  ┌─────────┐ │     └─────────────┘
-                     │  │ Judge 1 │ │
-┌─────────────┐     │  │  (GPT)  │ │
-│   Target     │────▶│  ├─────────┤ │
-│  (optional)  │     │  │ Judge 2 │ │
-│  Live chat   │     │  │ (Claude)│ │
-└─────────────┘     │  ├─────────┤ │
-                     │  │ Judge 3 │ │
-                     │  │(Gemini) │ │
-                     │  └─────────┘ │
-                     └──────────────┘
-```
+<p align="center">
+  <img src="docs/assets/architecture-en.png" alt="SOUK Architecture" width="600" />
+</p>
 
 1. **Load** test cases from YAML files (static conversations or live user turns)
 2. **Run** each conversation through multiple AI judge models
@@ -159,7 +148,7 @@ user_turns:
 SOUK can run as an MCP server for integration with AI coding tools:
 
 ```bash
-python -m chat_eval.mcp.server
+python -m souk.mcp.server
 ```
 
 ## Star History

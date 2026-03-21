@@ -26,5 +26,5 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
       - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
-    entrypoint: ["python", "-m", "chat_eval.mcp.server"]
+    entrypoint: ["python", "-m", "souk.mcp.server"]
     stdin_open: true

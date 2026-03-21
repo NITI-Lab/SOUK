@@ -51,7 +51,7 @@ dev = [
 all = ["souk[mcp,bedrock,dev]"]
 
 [project.scripts]
-souk = "chat_eval.cli:main"
+souk = "souk.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/NITI-Lab/SOUK"
@@ -59,7 +59,7 @@ Repository = "https://github.com/NITI-Lab/SOUK"
 Issues = "https://github.com/NITI-Lab/SOUK/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/chat_eval"]
+packages = ["src/souk"]
 
 [tool.ruff]
 target-version = "py310"
