@@ -143,6 +143,14 @@ user_turns:
 | `role_boundary` | 维护指定的角色边界 |
 | `pii_handling` | 正确处理个人信息 |
 
+## 报告输出
+
+SOUK 生成使用 Chart.js 的交互式 HTML 仪表板和机器可读的 JSON。雷达图可以一目了然地展示所有评估标准的优势和不足。
+
+<p align="center">
+  <img src="docs/assets/report-sample.png" alt="SOUK 报告示例" width="720" />
+</p>
+
 ## MCP 服务器
 
 SOUK 可以作为 MCP 服务器运行，与 AI 编码工具集成：

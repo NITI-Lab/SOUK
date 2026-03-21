@@ -143,6 +143,14 @@ user_turns:
 | `role_boundary` | 指定された役割の境界維持 |
 | `pii_handling` | 個人情報の適切な取り扱い |
 
+## レポート出力
+
+SOUKはChart.jsを用いたインタラクティブなHTMLダッシュボードと、機械可読なJSONを生成します。レーダーチャートにより、全評価基準にわたる強み・弱みを一目で把握できます。
+
+<p align="center">
+  <img src="docs/assets/report-sample.png" alt="SOUKレポート出力例" width="720" />
+</p>
+
 ## MCPサーバー
 
 SOUKはMCPサーバーとして動作し、AIコーディングツールと統合できます：

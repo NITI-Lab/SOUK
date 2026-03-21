@@ -87,7 +87,7 @@
   <h2>Scores by Criterion</h2>
   <div class="grid grid-2">
     <div class="card">
-      <div class="chart-container"><canvas id="criterionChart"></canvas></div>
+      <div class="chart-container"><canvas id="criterionRadar"></canvas></div>
     </div>
     <div class="card">
       <table>
@@ -178,7 +178,38 @@ function makeBar(ctx, labels, values, title) {
 }
 
 makeBar(document.getElementById('judgeChart'), Object.keys(DATA.by_judge), Object.values(DATA.by_judge), 'Average Score by Judge');
-makeBar(document.getElementById('criterionChart'), Object.keys(DATA.by_criterion), Object.values(DATA.by_criterion), 'Average Score by Criterion');
+
+// Radar chart for criteria
+new Chart(document.getElementById('criterionRadar'), {
+  type: 'radar',
+  data: {
+    labels: Object.keys(DATA.by_criterion),
+    datasets: [{
+      label: 'Score',
+      data: Object.values(DATA.by_criterion),
+      backgroundColor: 'rgba(56,189,248,0.15)',
+      borderColor: '#38bdf8',
+      borderWidth: 2,
+      pointBackgroundColor: Object.values(DATA.by_criterion).map(v => v >= 7 ? '#4ade80' : v >= 5 ? '#fbbf24' : '#f87171'),
+      pointBorderColor: '#1e293b',
+      pointRadius: 5,
+      pointBorderWidth: 2,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, title: { display: true, text: 'Criteria Radar', color: '#e2e8f0' } },
+    scales: {
+      r: {
+        min: 0, max: 10,
+        grid: { color: '#334155' },
+        angleLines: { color: '#334155' },
+        pointLabels: { color: '#94a3b8', font: { size: 10 } },
+        ticks: { color: '#94a3b8', backdropColor: 'transparent', stepSize: 2 }
+      }
+    }
+  }
+});
 
 const catEl = document.getElementById('categoryChart');
 if (catEl) makeBar(catEl, Object.keys(DATA.by_category), Object.values(DATA.by_category), 'Average Score by Category');
