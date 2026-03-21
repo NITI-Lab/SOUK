@@ -143,6 +143,14 @@ user_turns:
 | `role_boundary` | Maintaining designated role boundaries |
 | `pii_handling` | Proper handling of personal information |
 
+## Report Output
+
+SOUK generates interactive HTML dashboards with Chart.js and machine-readable JSON. The radar chart gives an at-a-glance view of strengths and weaknesses across all criteria.
+
+<p align="center">
+  <img src="docs/assets/report-sample.png" alt="SOUK Report Example" width="720" />
+</p>
+
 ## MCP Server
 
 SOUK can run as an MCP server for integration with AI coding tools:
