@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from chat_eval.cases.loader import load_cases, load_case_from_yaml
+from chat_eval.cases.loader import load_cases
 
 CASES_DIR = Path(__file__).parent.parent / "cases"
 

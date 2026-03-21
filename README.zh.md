@@ -19,7 +19,7 @@ SOUK 评估聊天助手推荐产品的能力、对话的自然程度以及对安
 
 ## 功能特性
 
-- **多模型评审** — 使用 GPT-4o、Claude、Gemini、Bedrock 或任何兼容 OpenAI 的端点作为评委
+- **多模型评审** — 使用 GPT、Claude、Gemini、Bedrock 或任何兼容 OpenAI 的端点作为评委
 - **10 项内置评估标准** — 自然度、推荐质量、连贯性、幻觉检测、有用性、有害性、提示注入、信息泄露、角色边界、PII 处理
 - **三语支持** — 所有评估标准和测试用例均支持英语、日语和中文
 - **静态和实时评估** — 评估预先录制的对话或测试实时端点
@@ -88,7 +88,7 @@ docker compose up souk
 │   (YAML)     │     │              │     │  HTML/JSON   │
 └─────────────┘     │  ┌─────────┐ │     └─────────────┘
                      │  │ 评委 1  │ │
-┌─────────────┐     │  │ (GPT-4o)│ │
+┌─────────────┐     │  │  (GPT)  │ │
 │    目标       │────▶│  ├─────────┤ │
 │  （可选）      │     │  │ 评委 2  │ │
 │  实时聊天     │     │  │ (Claude)│ │
@@ -164,11 +164,11 @@ python -m chat_eval.mcp.server
 
 ## Star History
 
-<a href="https://star-history.com/#NITI-Lab/SOUK&Date">
+<a href="https://www.star-history.com/?repos=NITI-Lab%2FSOUK&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=NITI-Lab/SOUK&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=NITI-Lab/SOUK&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=NITI-Lab/SOUK&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/image?repos=NITI-Lab/SOUK&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/image?repos=NITI-Lab/SOUK&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/image?repos=NITI-Lab/SOUK&type=date&legend=top-left" />
  </picture>
 </a>
 

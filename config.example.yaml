@@ -5,10 +5,10 @@
 #   OPENAI_API_KEY, ANTHROPIC_API_KEY, GOOGLE_API_KEY
 
 judges:
-  # GPT-4o as a judge
-  - id: gpt-4o
+  # GPT as a judge
+  - id: gpt-5.4
     provider: openai
-    model: gpt-4o
+    model: gpt-5.4
     temperature: 0.0
     # api_key: sk-...  # or set OPENAI_API_KEY env var
 

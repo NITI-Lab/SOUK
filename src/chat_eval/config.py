@@ -34,10 +34,7 @@ class JudgeConfig(BaseModel):
         env_var = env_map.get(self.provider, f"{self.provider.upper()}_API_KEY")
         key = os.environ.get(env_var, "")
         if not key:
-            raise ValueError(
-                f"API key not found for judge '{self.id}'. "
-                f"Set {env_var} or provide api_key in config."
-            )
+            raise ValueError(f"API key not found for judge '{self.id}'. Set {env_var} or provide api_key in config.")
         return key
 
 

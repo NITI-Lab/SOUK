@@ -13,11 +13,11 @@ JUDGE_REGISTRY: dict[str, type[JudgeBase]] = {}
 
 
 def _register_defaults() -> None:
-    from chat_eval.judges.openai_judge import OpenAIJudge
     from chat_eval.judges.anthropic_judge import AnthropicJudge
-    from chat_eval.judges.google_judge import GoogleJudge
-    from chat_eval.judges.endpoint_judge import EndpointJudge
     from chat_eval.judges.bedrock_judge import BedrockJudge
+    from chat_eval.judges.endpoint_judge import EndpointJudge
+    from chat_eval.judges.google_judge import GoogleJudge
+    from chat_eval.judges.openai_judge import OpenAIJudge
 
     JUDGE_REGISTRY.update(
         {
@@ -37,8 +37,5 @@ def create_judge(config: JudgeConfig) -> JudgeBase:
 
     judge_class = JUDGE_REGISTRY.get(config.provider)
     if judge_class is None:
-        raise ValueError(
-            f"Unknown judge provider: '{config.provider}'. "
-            f"Available: {list(JUDGE_REGISTRY.keys())}"
-        )
+        raise ValueError(f"Unknown judge provider: '{config.provider}'. Available: {list(JUDGE_REGISTRY.keys())}")
     return judge_class(config)

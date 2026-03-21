@@ -7,7 +7,7 @@ import time
 from dataclasses import dataclass, field
 
 from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
+from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 
 from chat_eval.cases.loader import TestCase
 from chat_eval.config import EvalConfig
@@ -23,6 +23,7 @@ def _create_target(config: EvalConfig) -> TargetClient | None:
         return None
     if config.target.provider == "agentcore":
         from chat_eval.targets.agentcore import AgentCoreTarget
+
         return AgentCoreTarget(config.target)  # type: ignore[return-value]
     return TargetClient(config.target)
 
@@ -119,10 +120,7 @@ class EvalRunner:
         """Run evaluation on all cases."""
         run = EvalRun(config=self.config, started_at=time.time())
 
-        self.console.print(
-            f"\n[bold]ChatEval[/bold] - Evaluating {len(cases)} cases "
-            f"with {len(self.judges)} judges\n"
-        )
+        self.console.print(f"\n[bold]ChatEval[/bold] - Evaluating {len(cases)} cases with {len(self.judges)} judges\n")
 
         with Progress(
             SpinnerColumn(),
@@ -141,9 +139,7 @@ class EvalRunner:
                     progress.advance(task)
                     return result
 
-            run.results = await asyncio.gather(
-                *[eval_case(c) for c in cases]
-            )
+            run.results = await asyncio.gather(*[eval_case(c) for c in cases])
 
         run.finished_at = time.time()
         run.errors = [r.error for r in run.results if r.error]
@@ -182,9 +178,7 @@ class EvalRunner:
             for judge in self.judges:
                 for criterion_name in criteria_names:
                     criterion = get_criterion(criterion_name, case.language)
-                    eval_tasks.append(
-                        self._run_judge(judge, conversation, criterion.prompt, criterion_name)
-                    )
+                    eval_tasks.append(self._run_judge(judge, conversation, criterion.prompt, criterion_name))
 
             judge_results = await asyncio.gather(*eval_tasks, return_exceptions=True)
             for jr in judge_results:

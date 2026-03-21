@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import json
-
 import boto3
 
 from chat_eval.config import JudgeConfig

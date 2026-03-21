@@ -9,7 +9,6 @@ from __future__ import annotations
 import asyncio
 import json
 import sys
-from pathlib import Path
 
 try:
     from mcp.server import Server
@@ -163,14 +162,20 @@ async def _handle_run(args: dict) -> list[TextContent]:
 async def _handle_list_cases(args: dict) -> list[TextContent]:
     cases = load_cases(args["cases_dir"])
     result = [
-        {"id": c.id, "name": c.name, "language": c.language, "category": c.category, "mode": "static" if c.is_static else "live"}
+        {
+            "id": c.id,
+            "name": c.name,
+            "language": c.language,
+            "category": c.category,
+            "mode": "static" if c.is_static else "live",
+        }
         for c in cases
     ]
     return [TextContent(type="text", text=json.dumps(result, indent=2, ensure_ascii=False))]
 
 
 async def _handle_list_criteria() -> list[TextContent]:
-    from chat_eval.criteria import list_criteria, get_criterion
+    from chat_eval.criteria import get_criterion, list_criteria
 
     result = []
     for name in list_criteria():

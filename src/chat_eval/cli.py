@@ -8,6 +8,13 @@ import sys
 from pathlib import Path
 
 import click
+from rich.console import Console
+from rich.table import Table
+
+from chat_eval.cases import load_cases
+from chat_eval.config import load_config
+from chat_eval.report import generate_report
+from chat_eval.runner import EvalRunner
 
 
 def _load_dotenv() -> None:
@@ -24,13 +31,7 @@ def _load_dotenv() -> None:
             key, value = key.strip(), value.strip()
             if not os.environ.get(key):
                 os.environ[key] = value
-from rich.console import Console
-from rich.table import Table
 
-from chat_eval.cases import load_cases
-from chat_eval.config import load_config
-from chat_eval.report import generate_report
-from chat_eval.runner import EvalRunner
 
 console = Console()
 
@@ -49,10 +50,7 @@ def main() -> None:
 @click.option("--tag", "-t", multiple=True, help="Filter by tag")
 @click.option("--output", "-o", type=click.Path(), help="Output directory for reports")
 @click.option("--case-id", help="Run a specific case by ID")
-@click.option(
-    "--judge", "-j", multiple=True,
-    help="Override judges. Format: provider:model (e.g., openai:gpt-4.1, bedrock:us.anthropic.claude-sonnet-4-5-20250514-v1:0)"
-)
+@click.option("--judge", "-j", multiple=True, help="Override judges. Format: provider:model (e.g., openai:gpt-5.4)")
 def run(
     config_path: str,
     category: tuple[str, ...],
@@ -68,18 +66,21 @@ def run(
     # Override judges from CLI if specified
     if judge:
         from chat_eval.config import JudgeConfig
+
         config.judges = []
         for j in judge:
             provider, _, model = j.partition(":")
             extra = {}
             if provider == "bedrock":
                 extra["region"] = "us-west-2"
-            config.judges.append(JudgeConfig(
-                id=f"{provider}-{model.split('.')[-1][:20]}",
-                provider=provider,
-                model=model,
-                extra=extra,
-            ))
+            config.judges.append(
+                JudgeConfig(
+                    id=f"{provider}-{model.split('.')[-1][:20]}",
+                    provider=provider,
+                    model=model,
+                    extra=extra,
+                )
+            )
 
     cases = load_cases(
         config.cases_dir,
@@ -139,7 +140,7 @@ def list_cases(cases_dir: str, language: tuple[str, ...], category: tuple[str, .
 @main.command()
 def list_criteria_cmd() -> None:
     """List available evaluation criteria."""
-    from chat_eval.criteria import list_criteria, get_criterion
+    from chat_eval.criteria import get_criterion, list_criteria
 
     table = Table(title="Evaluation Criteria")
     table.add_column("Name")
@@ -162,8 +163,10 @@ def list_criteria_cmd() -> None:
 
 @main.command()
 @click.option(
-    "--provider", "-p", multiple=True,
-    help="Provider to check (openai, google, bedrock). Default: auto-detect from env vars."
+    "--provider",
+    "-p",
+    multiple=True,
+    help="Provider to check (openai, google, bedrock). Default: auto-detect from env vars.",
 )
 @click.option("--filter", "-f", "name_filter", default=None, help="Filter model names (substring match)")
 def models(provider: tuple[str, ...], name_filter: str | None) -> None:
@@ -205,7 +208,9 @@ def models(provider: tuple[str, ...], name_filter: str | None) -> None:
 def _print_summary(summary: dict) -> None:
     """Print evaluation summary to console."""
     console.print(f"\n[bold]Overall Score: {summary['overall_avg']:.1f}/10[/bold]")
-    console.print(f"Cases: {summary['total_cases']} | Evaluations: {summary['total_evaluations']} | Duration: {summary['duration_seconds']:.1f}s\n")
+    evals = summary["total_evaluations"]
+    dur = summary["duration_seconds"]
+    console.print(f"Cases: {summary['total_cases']} | Evaluations: {evals} | Duration: {dur:.1f}s\n")
 
     if summary.get("by_judge"):
         table = Table(title="By Judge")

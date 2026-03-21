@@ -19,7 +19,7 @@ SOUK evaluates how well your chat assistant recommends products, handles convers
 
 ## Features
 
-- **Multi-model judging** — GPT-4o, Claude, Gemini, Bedrock, or any OpenAI-compatible endpoint as judges
+- **Multi-model judging** — GPT, Claude, Gemini, Bedrock, or any OpenAI-compatible endpoint as judges
 - **10 built-in criteria** — naturalness, recommendation quality, coherence, hallucination, helpfulness, toxicity, prompt injection, info leakage, role boundary, PII handling
 - **Trilingual** — All criteria and test cases available in English, Japanese, and Chinese
 - **Static & live evaluation** — Evaluate pre-recorded conversations or test live endpoints
@@ -88,7 +88,7 @@ docker compose up souk
 │  (YAML)      │     │              │     │  HTML/JSON   │
 └─────────────┘     │  ┌─────────┐ │     └─────────────┘
                      │  │ Judge 1 │ │
-┌─────────────┐     │  │ (GPT-4o)│ │
+┌─────────────┐     │  │  (GPT)  │ │
 │   Target     │────▶│  ├─────────┤ │
 │  (optional)  │     │  │ Judge 2 │ │
 │  Live chat   │     │  │ (Claude)│ │
@@ -164,11 +164,11 @@ python -m chat_eval.mcp.server
 
 ## Star History
 
-<a href="https://star-history.com/#NITI-Lab/SOUK&Date">
+<a href="https://www.star-history.com/?repos=NITI-Lab%2FSOUK&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=NITI-Lab/SOUK&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=NITI-Lab/SOUK&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=NITI-Lab/SOUK&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/image?repos=NITI-Lab/SOUK&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/image?repos=NITI-Lab/SOUK&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/image?repos=NITI-Lab/SOUK&type=date&legend=top-left" />
  </picture>
 </a>
 

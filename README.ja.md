@@ -19,7 +19,7 @@ SOUKは、チャットアシスタントが商品をどれだけ上手く推薦�
 
 ## 特徴
 
-- **マルチモデルジャッジ** — GPT-4o、Claude、Gemini、Bedrock、または任意のOpenAI互換エンドポイントをジャッジとして使用
+- **マルチモデルジャッジ** — GPT、Claude、Gemini、Bedrock、または任意のOpenAI互換エンドポイントをジャッジとして使用
 - **10個の組み込み評価基準** — 自然さ、推薦品質、一貫性、ハルシネーション、有用性、有害性、プロンプトインジェクション、情報漏洩、役割境界、PII取り扱い
 - **3言語対応** — すべての評価基準とテストケースが英語・日本語・中国語に対応
 - **静的・ライブ評価** — 記録済みの会話の評価、またはライブエンドポイントのテスト
@@ -88,7 +88,7 @@ docker compose up souk
 │  (YAML)      │     │              │     │  HTML/JSON   │
 └─────────────┘     │  ┌─────────┐ │     └─────────────┘
                      │  │ジャッジ1 │ │
-┌─────────────┐     │  │ (GPT-4o)│ │
+┌─────────────┐     │  │  (GPT)  │ │
 │  ターゲット   │────▶│  ├─────────┤ │
 │ （オプション） │     │  │ジャッジ2 │ │
 │  ライブチャット│     │  │ (Claude)│ │
@@ -164,11 +164,11 @@ python -m chat_eval.mcp.server
 
 ## Star History
 
-<a href="https://star-history.com/#NITI-Lab/SOUK&Date">
+<a href="https://www.star-history.com/?repos=NITI-Lab%2FSOUK&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=NITI-Lab/SOUK&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=NITI-Lab/SOUK&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=NITI-Lab/SOUK&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/image?repos=NITI-Lab/SOUK&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/image?repos=NITI-Lab/SOUK&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/image?repos=NITI-Lab/SOUK&type=date&legend=top-left" />
  </picture>
 </a>
 

@@ -47,26 +47,28 @@ def _build_report_data(run: EvalRun) -> dict:
     summary = run.summary()
     cases = []
     for r in run.results:
-        cases.append({
-            "id": r.case_id,
-            "name": r.case_name,
-            "language": r.language,
-            "category": r.category,
-            "avg_score": round(r.avg_score, 2),
-            "by_criterion": {k: round(v, 2) for k, v in r.avg_by_criterion().items()},
-            "by_judge": {k: round(v, 2) for k, v in r.avg_by_judge().items()},
-            "scores": [
-                {
-                    "judge_id": s.judge_id,
-                    "criterion": s.criterion,
-                    "score": round(s.score, 2),
-                    "reasoning": s.reasoning,
-                }
-                for s in r.scores
-            ],
-            "conversation": r.conversation,
-            "error": r.error,
-        })
+        cases.append(
+            {
+                "id": r.case_id,
+                "name": r.case_name,
+                "language": r.language,
+                "category": r.category,
+                "avg_score": round(r.avg_score, 2),
+                "by_criterion": {k: round(v, 2) for k, v in r.avg_by_criterion().items()},
+                "by_judge": {k: round(v, 2) for k, v in r.avg_by_judge().items()},
+                "scores": [
+                    {
+                        "judge_id": s.judge_id,
+                        "criterion": s.criterion,
+                        "score": round(s.score, 2),
+                        "reasoning": s.reasoning,
+                    }
+                    for s in r.scores
+                ],
+                "conversation": r.conversation,
+                "error": r.error,
+            }
+        )
 
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),

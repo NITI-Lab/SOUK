@@ -46,11 +46,13 @@ def list_bedrock_models(region: str = "us-west-2") -> list[dict[str, str]]:
         model_id = m["modelId"]
         # Include text-generation models
         if "TEXT" in m.get("outputModalities", []):
-            models.append({
-                "id": model_id,
-                "provider": "bedrock",
-                "name": m.get("modelName", ""),
-            })
+            models.append(
+                {
+                    "id": model_id,
+                    "provider": "bedrock",
+                    "name": m.get("modelName", ""),
+                }
+            )
     return sorted(models, key=lambda x: x["id"])
 
 
@@ -65,12 +67,14 @@ def list_bedrock_inference_profiles(region: str = "us-west-2") -> list[dict[str,
         return []
     profiles = []
     for p in response.get("inferenceProfileSummaries", []):
-        profiles.append({
-            "id": p["inferenceProfileId"],
-            "provider": "bedrock",
-            "name": p.get("inferenceProfileName", ""),
-            "type": "inference-profile",
-        })
+        profiles.append(
+            {
+                "id": p["inferenceProfileId"],
+                "provider": "bedrock",
+                "name": p.get("inferenceProfileName", ""),
+                "type": "inference-profile",
+            }
+        )
     return sorted(profiles, key=lambda x: x["id"])
 
 

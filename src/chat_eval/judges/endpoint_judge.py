@@ -18,9 +18,7 @@ class EndpointJudge(JudgeBase):
     def __init__(self, config: JudgeConfig) -> None:
         super().__init__(config)
         if not config.base_url:
-            raise ValueError(
-                f"EndpointJudge '{config.id}' requires base_url in config."
-            )
+            raise ValueError(f"EndpointJudge '{config.id}' requires base_url in config.")
         self.client = AsyncOpenAI(
             api_key=config.api_key or "not-needed",
             base_url=config.base_url,

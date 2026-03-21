@@ -9,7 +9,7 @@ from chat_eval.judges.base import JudgeBase, JudgeResult
 
 
 class OpenAIJudge(JudgeBase):
-    """Judge using OpenAI API (GPT-4, GPT-4o, etc.)."""
+    """Judge using OpenAI API (GPT-5.4, etc.)."""
 
     def __init__(self, config: JudgeConfig) -> None:
         super().__init__(config)
@@ -27,7 +27,8 @@ class OpenAIJudge(JudgeBase):
         messages = self._build_eval_messages(conversation, criterion_prompt)
         # GPT-5+ uses max_completion_tokens instead of max_tokens
         token_param = (
-            "max_completion_tokens" if self.config.model.startswith("gpt-5") or self.config.model.startswith("o")
+            "max_completion_tokens"
+            if self.config.model.startswith("gpt-5") or self.config.model.startswith("o")
             else "max_tokens"
         )
         response = await self.client.chat.completions.create(

@@ -75,6 +75,12 @@ htmlcov/
 docker-compose.override.yml
 
 # ===========================
+# Node (husky)
+# ===========================
+node_modules/
+package-lock.json
+
+# ===========================
 # Misc
 # ===========================
 *.log

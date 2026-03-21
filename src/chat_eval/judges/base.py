@@ -64,9 +64,7 @@ class JudgeBase(ABC):
         criterion_prompt: str,
     ) -> list[dict[str, str]]:
         """Build messages for the evaluation request."""
-        conv_text = "\n".join(
-            f"[{m['role'].upper()}]: {m['content']}" for m in conversation
-        )
+        conv_text = "\n".join(f"[{m['role'].upper()}]: {m['content']}" for m in conversation)
         return [
             {"role": "system", "content": self._build_system_prompt(criterion_prompt)},
             {
@@ -75,9 +73,7 @@ class JudgeBase(ABC):
             },
         ]
 
-    def _parse_result(
-        self, raw: str, criterion_name: str
-    ) -> tuple[float, str]:
+    def _parse_result(self, raw: str, criterion_name: str) -> tuple[float, str]:
         """Parse score and reasoning from judge response."""
         import json
         import re

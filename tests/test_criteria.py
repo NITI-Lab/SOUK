@@ -3,9 +3,16 @@
 from chat_eval.criteria import get_criterion, list_criteria
 
 ALL_CRITERIA = [
-    "naturalness", "recommendation", "coherence",
-    "hallucination", "helpfulness", "toxicity",
-    "prompt_injection", "info_leakage", "role_boundary", "pii_handling",
+    "naturalness",
+    "recommendation",
+    "coherence",
+    "hallucination",
+    "helpfulness",
+    "toxicity",
+    "prompt_injection",
+    "info_leakage",
+    "role_boundary",
+    "pii_handling",
 ]
 
 ALL_LANGUAGES = ["en", "ja", "zh"]
@@ -21,10 +28,7 @@ def test_all_criteria_have_all_languages():
     for name in ALL_CRITERIA:
         for lang in ALL_LANGUAGES:
             c = get_criterion(name, lang)
-            assert c.language == lang, (
-                f"Criterion '{name}' missing language '{lang}' "
-                f"(got '{c.language}' via fallback)"
-            )
+            assert c.language == lang, f"Criterion '{name}' missing language '{lang}' (got '{c.language}' via fallback)"
 
 
 def test_get_criterion_fallback():
