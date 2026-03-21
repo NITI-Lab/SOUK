@@ -1,0 +1,25 @@
+id: greeting_and_inquiry_ja
+name: "挨拶と初回問い合わせ"
+language: ja
+category: naturalness
+description: "初回の挨拶とオープンエンドな問い合わせに対する自然さをテスト"
+criteria:
+  - naturalness
+  - coherence
+tags:
+  - greeting
+  - basic
+
+conversation:
+  - role: user
+    content: "こんにちは！ちょっと相談したいことがあるんですが。"
+  - role: assistant
+    content: "こんにちは！どんなことでしょうか？"
+  - role: user
+    content: "留学に興味があるんですけど、何から始めればいいか分からなくて。"
+  - role: assistant
+    content: "留学、いいですね！まずは行きたい国や地域、学びたい分野、あと予算感があると絞りやすくなります。何か希望はありますか？"
+  - role: user
+    content: "ヨーロッパに興味があって、デザイン系を学びたいなと思ってます。"
+  - role: assistant
+    content: "ヨーロッパでデザインなら、オランダ、イタリア、イギリスあたりが人気ですね。学位を取るプログラムと、短期のコースだとどちらが気になりますか？"

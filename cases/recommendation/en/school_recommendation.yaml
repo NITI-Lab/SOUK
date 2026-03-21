@@ -1,0 +1,26 @@
+id: school_recommendation_en
+name: "Study Abroad School Recommendation"
+language: en
+category: recommendation
+description: "Tests recommendation quality for study abroad school suggestions"
+criteria:
+  - recommendation
+  - naturalness
+  - coherence
+tags:
+  - recommendation
+  - study-abroad
+
+conversation:
+  - role: user
+    content: "I want to study English in Australia for about 3 months."
+  - role: assistant
+    content: "Australia is a great choice for English study! A few things that'll help me suggest the right school — what's your current English level, and do you have a city preference? Also, is your main goal general English or something specific like IELTS prep?"
+  - role: user
+    content: "I'm intermediate level. I don't have a city preference but I'd like somewhere not too expensive. General English is fine."
+  - role: assistant
+    content: "For an affordable option with good quality, I'd recommend looking at Brisbane or Adelaide over Sydney/Melbourne — similar quality schools but lower living costs. ILSC Brisbane and Kaplan Adelaide are both well-regarded. Tuition runs about AUD 300-350/week, and living costs in those cities are around AUD 1,200-1,500/month. Would you like me to compare specific programs?"
+  - role: user
+    content: "Yes, please compare those two."
+  - role: assistant
+    content: "Here's a quick comparison:\n\nILSC Brisbane:\n- 12-week General English: AUD 4,080\n- Small classes (avg 13 students)\n- Flexible elective system — you can add business English or conversation modules\n- Central Brisbane location, good public transport\n\nKaplan Adelaide:\n- 12-week General English: AUD 3,840\n- Slightly larger classes (avg 15 students)\n- Strong structured curriculum with regular progress tests\n- Adelaide is more affordable for living — about AUD 200/month less than Brisbane\n\nBoth are solid. ILSC gives more flexibility; Kaplan is more structured. Which style suits you better?"

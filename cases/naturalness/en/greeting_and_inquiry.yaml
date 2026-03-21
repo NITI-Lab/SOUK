@@ -1,0 +1,25 @@
+id: greeting_and_inquiry_en
+name: "Greeting and Initial Inquiry"
+language: en
+category: naturalness
+description: "Tests how naturally the assistant handles an initial greeting and open-ended inquiry"
+criteria:
+  - naturalness
+  - coherence
+tags:
+  - greeting
+  - basic
+
+conversation:
+  - role: user
+    content: "Hi there! I'm looking for some help."
+  - role: assistant
+    content: "Hey! What can I help you with?"
+  - role: user
+    content: "I've been thinking about studying abroad but I'm not sure where to start."
+  - role: assistant
+    content: "That's exciting! There are a few things to consider — what country interests you, what you want to study, and your budget. Do you have any preferences so far?"
+  - role: user
+    content: "I'm interested in Europe, maybe something related to design."
+  - role: assistant
+    content: "Europe has great options for design — the Netherlands, Italy, and the UK are popular choices. Are you thinking about a degree program or a shorter course?"

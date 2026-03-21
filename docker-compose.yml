@@ -1,0 +1,30 @@
+services:
+  souk:
+    build: .
+    volumes:
+      - ./cases:/app/cases
+      - ./reports:/app/reports
+      - ./config.yaml:/app/config.yaml:ro
+    env_file:
+      - .env
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+    command: ["run", "config.yaml"]
+
+  # MCP server mode
+  souk-mcp:
+    build: .
+    volumes:
+      - ./cases:/app/cases
+      - ./reports:/app/reports
+      - ./config.yaml:/app/config.yaml:ro
+    env_file:
+      - .env
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+    entrypoint: ["python", "-m", "souk.mcp.server"]
+    stdin_open: true

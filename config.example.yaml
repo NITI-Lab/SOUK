@@ -1,0 +1,65 @@
+# SOUK Configuration Example
+#
+# Define judge models, target service, and evaluation parameters.
+# API keys can be set here or via environment variables:
+#   OPENAI_API_KEY, ANTHROPIC_API_KEY, GOOGLE_API_KEY
+
+judges:
+  # GPT as a judge
+  - id: gpt-5.4
+    provider: openai
+    model: gpt-5.4
+    temperature: 0.0
+    # api_key: sk-...  # or set OPENAI_API_KEY env var
+
+  # Claude as a judge
+  - id: claude-sonnet
+    provider: anthropic
+    model: claude-sonnet-4-20250514
+    temperature: 0.0
+    # api_key: sk-ant-...  # or set ANTHROPIC_API_KEY env var
+
+  # Gemini as a judge
+  - id: gemini-pro
+    provider: google
+    model: gemini-2.0-flash
+    temperature: 0.0
+    # api_key: ...  # or set GOOGLE_API_KEY env var
+
+  # Custom endpoint (e.g., vLLM, Ollama, Azure OpenAI)
+  # - id: local-llama
+  #   provider: endpoint
+  #   model: llama-3.1-70b
+  #   base_url: http://localhost:8080/v1
+  #   api_key: not-needed
+
+# Target service for live evaluation (optional)
+# Only needed if you have test cases with user_turns (live mode)
+# target:
+#   provider: endpoint
+#   model: default
+#   base_url: http://localhost:8000/v1
+#   headers:
+#     x-tenant-id: my-tenant
+
+# Evaluation settings
+criteria:
+  - naturalness
+  - recommendation
+  - coherence
+
+cases_dir: ./cases
+
+languages:
+  - en
+  - ja
+
+concurrency: 3
+
+# Report settings
+report:
+  output_dir: ./reports
+  formats:
+    - html
+    - json
+  title: "Chat Quality Evaluation Report"

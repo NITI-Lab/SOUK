@@ -1,0 +1,20 @@
+id: live_study_abroad_en
+name: "Live Study Abroad Inquiry"
+language: en
+category: naturalness
+description: "Live evaluation - sends user turns to target endpoint and evaluates responses"
+criteria:
+  - naturalness
+  - coherence
+tags:
+  - live
+  - study-abroad
+
+# No 'conversation' field — these user turns are sent to the target service
+# and the responses are evaluated by the judges
+user_turns:
+  - "Hi, I'm interested in studying abroad."
+  - "I'm thinking about learning English somewhere warm."
+  - "My budget is pretty limited, maybe around $5000 for tuition."
+  - "I'd prefer a smaller city, not too crowded."
+  - "How long would a typical program be?"

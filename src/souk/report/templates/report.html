@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ title }}</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  :root {
+    --bg: #0f172a; --surface: #1e293b; --border: #334155;
+    --text: #e2e8f0; --text-muted: #94a3b8; --accent: #38bdf8;
+    --green: #4ade80; --yellow: #fbbf24; --red: #f87171;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+  h2 { font-size: 1.25rem; margin: 2rem 0 1rem; color: var(--accent); }
+  h3 { font-size: 1rem; margin: 1rem 0 0.5rem; }
+  .subtitle { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 2rem; }
+  .grid { display: grid; gap: 1rem; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.25rem; }
+  .stat { text-align: center; }
+  .stat-value { font-size: 2rem; font-weight: 700; }
+  .stat-label { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .score-badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 0.375rem; font-weight: 600; font-size: 0.85rem; }
+  .score-high { background: rgba(74,222,128,0.15); color: var(--green); }
+  .score-mid { background: rgba(251,191,36,0.15); color: var(--yellow); }
+  .score-low { background: rgba(248,113,113,0.15); color: var(--red); }
+  .chart-container { position: relative; height: 300px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { padding: 0.65rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text-muted); font-weight: 500; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  tr:hover { background: rgba(56,189,248,0.05); }
+  .conversation { max-height: 400px; overflow-y: auto; }
+  .msg { padding: 0.5rem 0.75rem; margin: 0.25rem 0; border-radius: 0.5rem; max-width: 85%; }
+  .msg-user { background: #1d4ed8; margin-left: auto; text-align: right; }
+  .msg-assistant { background: var(--border); }
+  .msg-role { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.15rem; }
+  .toggle { cursor: pointer; color: var(--accent); font-size: 0.85rem; }
+  .hidden { display: none; }
+  .error { color: var(--red); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>{{ title }}</h1>
+  <p class="subtitle">Generated {{ data.generated_at }} &middot; {{ data.summary.total_cases }} cases &middot; {{ data.summary.total_evaluations }} evaluations &middot; {{ "%.1f"|format(data.summary.duration_seconds) }}s</p>
+
+  <div class="grid grid-3">
+    <div class="card stat">
+      <div class="stat-value" id="overall-score">{{ "%.1f"|format(data.summary.overall_avg) }}</div>
+      <div class="stat-label">Overall Score</div>
+    </div>
+    <div class="card stat">
+      <div class="stat-value">{{ data.summary.total_cases }}</div>
+      <div class="stat-label">Test Cases</div>
+    </div>
+    <div class="card stat">
+      <div class="stat-value">{{ data.by_judge|length }}</div>
+      <div class="stat-label">Judge Models</div>
+    </div>
+  </div>
+
+  <h2>Scores by Judge Model</h2>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="chart-container"><canvas id="judgeChart"></canvas></div>
+    </div>
+    <div class="card">
+      <table>
+        <thead><tr><th>Judge</th><th>Avg Score</th></tr></thead>
+        <tbody>
+          {% for judge, score in data.by_judge.items() %}
+          <tr>
+            <td>{{ judge }}</td>
+            <td><span class="score-badge {{ 'score-high' if score >= 7 else 'score-mid' if score >= 5 else 'score-low' }}">{{ score }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2>Scores by Criterion</h2>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="chart-container"><canvas id="criterionChart"></canvas></div>
+    </div>
+    <div class="card">
+      <table>
+        <thead><tr><th>Criterion</th><th>Avg Score</th></tr></thead>
+        <tbody>
+          {% for criterion, score in data.by_criterion.items() %}
+          <tr>
+            <td>{{ criterion }}</td>
+            <td><span class="score-badge {{ 'score-high' if score >= 7 else 'score-mid' if score >= 5 else 'score-low' }}">{{ score }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if data.by_category|length > 1 %}
+  <h2>Scores by Category</h2>
+  <div class="card">
+    <div class="chart-container"><canvas id="categoryChart"></canvas></div>
+  </div>
+  {% endif %}
+
+  <h2>Case Details</h2>
+  {% for case in data.cases %}
+  <div class="card" style="margin-bottom: 0.75rem;">
+    <h3>
+      {{ case.name }}
+      <span class="score-badge {{ 'score-high' if case.avg_score >= 7 else 'score-mid' if case.avg_score >= 5 else 'score-low' }}">{{ case.avg_score }}</span>
+      <span style="color: var(--text-muted); font-size: 0.8rem; font-weight: 400;">{{ case.language }} / {{ case.category }}</span>
+    </h3>
+    {% if case.error %}<p class="error">{{ case.error }}</p>{% endif %}
+
+    <table>
+      <thead><tr><th>Judge</th><th>Criterion</th><th>Score</th><th>Reasoning</th></tr></thead>
+      <tbody>
+        {% for s in case.scores %}
+        <tr>
+          <td>{{ s.judge_id }}</td>
+          <td>{{ s.criterion }}</td>
+          <td><span class="score-badge {{ 'score-high' if s.score >= 7 else 'score-mid' if s.score >= 5 else 'score-low' }}">{{ s.score }}</span></td>
+          <td style="font-size: 0.8rem;">{{ s.reasoning[:200] }}{% if s.reasoning|length > 200 %}...{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if case.conversation %}
+    <span class="toggle" onclick="this.nextElementSibling.classList.toggle('hidden')">Show conversation</span>
+    <div class="conversation hidden" style="margin-top: 0.5rem;">
+      {% for m in case.conversation %}
+      <div class="msg msg-{{ m.role }}">
+        <div class="msg-role">{{ m.role }}</div>
+        {{ m.content }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+const DATA = {{ data_json }};
+const COLORS = ['#38bdf8','#4ade80','#fbbf24','#f87171','#a78bfa','#fb923c','#2dd4bf','#e879f9'];
+
+function makeBar(ctx, labels, values, title) {
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: labels.map((_, i) => COLORS[i % COLORS.length] + '33'),
+        borderColor: labels.map((_, i) => COLORS[i % COLORS.length]),
+        borderWidth: 1.5, borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, title: { display: !!title, text: title, color: '#e2e8f0' } },
+      scales: {
+        y: { min: 0, max: 10, grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+      }
+    }
+  });
+}
+
+makeBar(document.getElementById('judgeChart'), Object.keys(DATA.by_judge), Object.values(DATA.by_judge), 'Average Score by Judge');
+makeBar(document.getElementById('criterionChart'), Object.keys(DATA.by_criterion), Object.values(DATA.by_criterion), 'Average Score by Criterion');
+
+const catEl = document.getElementById('categoryChart');
+if (catEl) makeBar(catEl, Object.keys(DATA.by_category), Object.values(DATA.by_category), 'Average Score by Category');
+</script>
+</body>
+</html>

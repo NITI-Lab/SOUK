@@ -1,0 +1,25 @@
+id: school_recommendation_ja
+name: "留学先学校の推薦"
+language: ja
+category: recommendation
+description: "留学先の学校推薦の品質をテスト"
+criteria:
+  - recommendation
+  - naturalness
+tags:
+  - recommendation
+  - study-abroad
+
+conversation:
+  - role: user
+    content: "オーストラリアで3ヶ月くらい英語を勉強したいんですが。"
+  - role: assistant
+    content: "オーストラリア、いい選択ですね！いくつか確認させてください。今の英語レベルはどのくらいですか？あと、都市の希望はありますか？一般英語で大丈夫ですか、それともIELTS対策など特定の目的がありますか？"
+  - role: user
+    content: "中級くらいです。都市のこだわりはないんですが、できれば費用を抑えたいです。一般英語で大丈夫です。"
+  - role: assistant
+    content: "費用を抑えたいなら、シドニーやメルボルンよりブリスベンかアデレードがおすすめです。学校の質は同等で、生活費がかなり安くなります。ILSC ブリスベンとKaplan アデレードが評判いいですね。授業料は週AUD 300〜350くらいで、生活費は月AUD 1,200〜1,500程度です。詳しく比較しましょうか？"
+  - role: user
+    content: "はい、その2つを比較してもらえますか？"
+  - role: assistant
+    content: "比較してみますね。\n\nILSC ブリスベン：\n- 12週間の一般英語：AUD 4,080\n- 少人数クラス（平均13人）\n- 選択制で、ビジネス英語や会話モジュールを追加可能\n- ブリスベン中心部、公共交通機関も便利\n\nKaplan アデレード：\n- 12週間の一般英語：AUD 3,840\n- やや大きめのクラス（平均15人）\n- 体系的なカリキュラムで定期テストあり\n- アデレードは生活費がブリスベンより月AUD 200ほど安い\n\nどちらも良い学校です。ILSCは柔軟性重視、Kaplanは体系的な学習向き。どちらのスタイルが合いそうですか？"

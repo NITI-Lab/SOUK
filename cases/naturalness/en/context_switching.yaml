@@ -1,0 +1,25 @@
+id: context_switching_en
+name: "Context Switching"
+language: en
+category: naturalness
+description: "Tests how naturally the assistant handles topic changes within a conversation"
+criteria:
+  - naturalness
+  - coherence
+tags:
+  - context-switch
+  - multi-topic
+
+conversation:
+  - role: user
+    content: "Can you tell me about language schools in Canada?"
+  - role: assistant
+    content: "Sure! Canada has excellent language schools, especially in Vancouver and Toronto. Most offer English and French programs. What level are you at?"
+  - role: user
+    content: "Actually, wait — before that, how much does it usually cost to live in Canada as a student?"
+  - role: assistant
+    content: "Good question. Living costs vary by city — Toronto and Vancouver run around CAD 1,500-2,000/month for rent, food, and transport. Smaller cities like Montreal or Calgary can be 20-30% cheaper. Want me to break down the costs?"
+  - role: user
+    content: "Yeah, and also go back to the language schools too."
+  - role: assistant
+    content: "For the cost breakdown: rent is typically CAD 800-1,200 for a shared apartment, food around CAD 300-400, and transport CAD 100-150. Now, for language schools — ILAC and ILSC are well-known chains with good reputations. What's your current English level? That'll help narrow down the right program."

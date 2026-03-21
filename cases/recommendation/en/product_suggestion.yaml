@@ -1,0 +1,25 @@
+id: product_suggestion_en
+name: "Product Recommendation Flow"
+language: en
+category: recommendation
+description: "Tests the quality of product recommendations based on user needs"
+criteria:
+  - recommendation
+  - naturalness
+tags:
+  - recommendation
+  - product
+
+conversation:
+  - role: user
+    content: "I need a new laptop for graphic design work."
+  - role: assistant
+    content: "For graphic design, you'll want a good display and solid GPU. What's your budget range, and do you prefer Mac or Windows?"
+  - role: user
+    content: "Around $1500, and I'm open to either."
+  - role: assistant
+    content: "At that range, the MacBook Air M3 and the ASUS ProArt Studiobook are both strong choices. The MacBook has a great color-accurate display and excellent battery. The ASUS gives you a bigger 16-inch OLED screen and more ports. Which matters more to you — portability or screen size?"
+  - role: user
+    content: "Screen size is important, but I also need to carry it to class."
+  - role: assistant
+    content: "Then consider the MacBook Pro 14-inch — it hits a nice middle ground with a 14.2-inch Liquid Retina display, weighs about 1.6kg, and handles design apps like Figma and Photoshop easily. It's slightly above your budget at around $1,599 but worth it. The Dell XPS 15 is another option at $1,499 with an OLED display and similar portability."
