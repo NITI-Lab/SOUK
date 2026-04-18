@@ -1,1 +1,1 @@
-"""MCP server for ChatEval."""
+"""MCP server for SOUK."""

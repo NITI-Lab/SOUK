@@ -17,14 +17,16 @@
 
 ---
 
-SOUK evaluates how well your chat assistant recommends products, handles conversations naturally, and resists security attacks. It uses multiple AI models (GPT, Claude, Gemini) as judges to score conversations across configurable criteria.
+SOUK evaluates how well your chat assistant recommends products, handles conversations naturally, and resists security attacks. It uses multiple AI models (GPT, Claude, Gemini) as judges to score conversations across configurable criteria, and includes a persona-driven simulator for batch quality runs.
 
 ## Features
 
-- **Multi-model judging** — GPT, Claude, Gemini, Bedrock, or any OpenAI-compatible endpoint as judges
-- **10 built-in criteria** — naturalness, recommendation quality, coherence, hallucination, helpfulness, toxicity, prompt injection, info leakage, role boundary, PII handling
+- **Multi-model judging** — GPT-5.x, Claude 4.x, Gemini 2.x, Bedrock, or any OpenAI-compatible endpoint as judges
+- **Round-robin target comparison** — Evaluate the same cases against multiple target models in one run, with response-time tracking and target × criterion cross-tabulation
+- **Persona-driven simulator** — Generate stratified persona libraries, run live conversations, and judge them against a strict 40-item rubric in a single batch
+- **10 built-in criteria** — naturalness, recommendation, coherence, hallucination, helpfulness, toxicity, prompt injection, info leakage, role boundary, PII handling
 - **Trilingual** — All criteria and test cases available in English, Japanese, and Chinese
-- **Static & live evaluation** — Evaluate pre-recorded conversations or test live endpoints
+- **Static & live evaluation** — Score pre-recorded conversations or test live endpoints
 - **HTML + JSON reports** — Visual dashboards with Chart.js and machine-readable JSON
 - **MCP server** — Integrate evaluations into AI-powered development workflows
 - **Docker ready** — Run evaluations in containers with zero setup
@@ -72,7 +74,30 @@ cp .env.example .env
 souk run config.yaml
 ```
 
-See [config.example.yaml](config.example.yaml) for all available options.
+A minimal `config.yaml`:
+
+```yaml
+judges:
+  - id: gpt-5.4
+    provider: openai
+    model: gpt-5.4
+  - id: claude-sonnet
+    provider: anthropic
+    model: claude-sonnet-4-6
+  - id: gemini-pro
+    provider: google
+    model: gemini-2.5-pro
+
+criteria:
+  - naturalness
+  - recommendation
+
+cases_dir: ./cases
+languages: [en]
+concurrency: 3
+```
+
+See [config.example.yaml](config.example.yaml) for all options including round-robin `targets`.
 
 ## Docker
 
@@ -89,8 +114,8 @@ docker compose up souk
 </p>
 
 1. **Load** test cases from YAML files (static conversations or live user turns)
-2. **Run** each conversation through multiple AI judge models
-3. **Score** against selected criteria (0-10 scale with detailed rubrics)
+2. **Run** each conversation through one or more target models
+3. **Judge** with multiple AI judges against selected criteria (0–10 scale with detailed rubrics)
 4. **Generate** HTML dashboards and JSON reports
 
 ## Writing Test Cases
@@ -127,6 +152,49 @@ user_turns:
   - "I run about 30km per week on pavement"
   - "My budget is around $150"
 ```
+
+## Round-Robin Target Comparison
+
+Compare multiple target models on the same cases:
+
+```yaml
+targets:
+  - id: gpt-5.4
+    provider: openai
+    model: gpt-5.4
+  - id: claude-opus
+    provider: anthropic
+    model: claude-opus-4-7
+  - id: claude-sonnet
+    provider: anthropic
+    model: claude-sonnet-4-6
+```
+
+The CLI prints a `By Target Model` table with average score, average per-turn latency, and total time, plus a `Target × Criterion` cross-tabulation.
+
+## Persona-Driven Simulator
+
+For large-scale quality runs, the `souk.simulator` module generates synthetic users, drives them through live conversations with your agent, and scores each conversation against a strict 40-item rubric.
+
+```bash
+# 1. Generate a stratified persona library (5 occupations × 5 purposes ×
+#    4 priorities = 100 cells; 200 personas balance every cell evenly)
+python scripts/generate_personas.py --n 200 --seed 0 --out personas/default_200.yaml
+
+# 2. Run the batch against your agent
+AGENTCORE_API_KEY=... OPENAI_API_KEY=... \
+  python scripts/run_simulated_batch.py \
+    --personas personas/default_200.yaml \
+    --base-url https://your-agent.example.com \
+    --concurrency 8 \
+    --out reports/run_$(date +%Y%m%d_%H%M)
+```
+
+Each conversation produces a per-conversation JSON dump, a flat `results.csv`, a `summary.json`, and a `REPORT.md` with severity breakdown, top failing rubric items, persona-attribute heatmap, and worst-N conversations with evidence quotes.
+
+The default rubric ([`rubrics/ec_recommendation_strict.yaml`](rubrics/ec_recommendation_strict.yaml)) is tailored to EC recommendation chat (8 categories: hallucination, state_leak, assumption, intent_handling, format_compliance, tone_naturalness, safety, completion). Replace it with your own to target a different domain.
+
+To ground hallucination items in your real catalog, pass `--products-json path/to/products.json` to `run_simulated_batch.py` — the judge then knows which product names / URLs are legitimate.
 
 ## Evaluation Criteria
 

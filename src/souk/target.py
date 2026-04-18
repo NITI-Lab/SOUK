@@ -6,6 +6,8 @@ from openai import AsyncOpenAI
 
 from souk.config import TargetConfig
 
+_EXTRA_META_KEYS = {"api_key_env", "tenant_id", "timeout"}
+
 
 class TargetClient:
     """Client for interacting with the target service being evaluated.
@@ -20,6 +22,8 @@ class TargetClient:
             api_key=config.resolve_api_key() or "not-needed",
             base_url=config.base_url,
         )
+        # Filter out meta keys that shouldn't be passed to the API
+        self._api_extra = {k: v for k, v in config.extra.items() if k not in _EXTRA_META_KEYS}
 
     async def run_conversation(
         self,
@@ -40,7 +44,7 @@ class TargetClient:
             response = await self.client.chat.completions.create(
                 model=self.config.model or "default",
                 messages=messages,  # type: ignore[arg-type]
-                **self.config.extra,
+                **self._api_extra,
             )
             assistant_msg = response.choices[0].message.content or ""
             messages.append({"role": "assistant", "content": assistant_msg})

@@ -15,14 +15,14 @@ judges:
   # Claude as a judge
   - id: claude-sonnet
     provider: anthropic
-    model: claude-sonnet-4-20250514
+    model: claude-sonnet-4-6
     temperature: 0.0
     # api_key: sk-ant-...  # or set ANTHROPIC_API_KEY env var
 
   # Gemini as a judge
   - id: gemini-pro
     provider: google
-    model: gemini-2.0-flash
+    model: gemini-2.5-pro
     temperature: 0.0
     # api_key: ...  # or set GOOGLE_API_KEY env var
 
@@ -41,6 +41,18 @@ judges:
 #   base_url: http://localhost:8000/v1
 #   headers:
 #     x-tenant-id: my-tenant
+
+# Multiple targets for round-robin model comparison (optional, alternative to single target)
+# targets:
+#   - id: gpt-5.4
+#     provider: openai
+#     model: gpt-5.4
+#   - id: claude-opus
+#     provider: anthropic
+#     model: claude-opus-4-7
+#   - id: claude-sonnet
+#     provider: anthropic
+#     model: claude-sonnet-4-6
 
 # Evaluation settings
 criteria:

@@ -1,4 +1,4 @@
-"""MCP server exposing ChatEval as tools.
+"""MCP server exposing SOUK as tools.
 
 Run with: python -m souk.mcp.server
 Or configure in MCP settings as a stdio server.
@@ -30,7 +30,7 @@ server = Server("souk")
 async def list_tools() -> list[Tool]:
     return [
         Tool(
-            name="chateval_run",
+            name="souk_run",
             description=(
                 "Run chat quality evaluation. Evaluates conversations using multiple "
                 "AI judge models across criteria like naturalness and recommendation quality."
@@ -59,7 +59,7 @@ async def list_tools() -> list[Tool]:
             },
         ),
         Tool(
-            name="chateval_list_cases",
+            name="souk_list_cases",
             description="List available test cases",
             inputSchema={
                 "type": "object",
@@ -73,12 +73,12 @@ async def list_tools() -> list[Tool]:
             },
         ),
         Tool(
-            name="chateval_list_criteria",
+            name="souk_list_criteria",
             description="List available evaluation criteria",
             inputSchema={"type": "object", "properties": {}},
         ),
         Tool(
-            name="chateval_evaluate_conversation",
+            name="souk_evaluate_conversation",
             description=(
                 "Evaluate a single conversation inline (no YAML file needed). "
                 "Provide the conversation directly as a list of messages."
@@ -121,13 +121,13 @@ async def list_tools() -> list[Tool]:
 
 @server.call_tool()
 async def call_tool(name: str, arguments: dict) -> list[TextContent]:
-    if name == "chateval_run":
+    if name == "souk_run":
         return await _handle_run(arguments)
-    elif name == "chateval_list_cases":
+    elif name == "souk_list_cases":
         return await _handle_list_cases(arguments)
-    elif name == "chateval_list_criteria":
+    elif name == "souk_list_criteria":
         return await _handle_list_criteria()
-    elif name == "chateval_evaluate_conversation":
+    elif name == "souk_evaluate_conversation":
         return await _handle_evaluate_conversation(arguments)
     else:
         return [TextContent(type="text", text=f"Unknown tool: {name}")]
