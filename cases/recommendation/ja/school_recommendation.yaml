@@ -8,7 +8,7 @@ criteria:
   - naturalness
 tags:
   - recommendation
-  - study-abroad
+  - education
 
 conversation:
   - role: user
