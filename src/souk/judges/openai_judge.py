@@ -9,7 +9,7 @@ from souk.judges.base import JudgeBase, JudgeResult
 
 
 class OpenAIJudge(JudgeBase):
-    """Judge using OpenAI API (GPT-5.4, etc.)."""
+    """Judge using OpenAI API (GPT-5.x, GPT-4o, o-series)."""
 
     def __init__(self, config: JudgeConfig) -> None:
         super().__init__(config)

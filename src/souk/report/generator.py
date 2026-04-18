@@ -27,13 +27,13 @@ def generate_report(run: EvalRun, output_dir: str | Path | None = None) -> dict[
     report_data = _build_report_data(run)
 
     if "json" in run.config.report.formats:
-        json_path = output_dir / f"chateval_{timestamp}.json"
+        json_path = output_dir / f"souk_{timestamp}.json"
         with open(json_path, "w") as f:
             json.dump(report_data, f, indent=2, ensure_ascii=False)
         outputs["json"] = json_path
 
     if "html" in run.config.report.formats:
-        html_path = output_dir / f"chateval_{timestamp}.html"
+        html_path = output_dir / f"souk_{timestamp}.html"
         html_content = _render_html(report_data, run.config.report.title)
         with open(html_path, "w") as f:
             f.write(html_content)
@@ -47,35 +47,40 @@ def _build_report_data(run: EvalRun) -> dict:
     summary = run.summary()
     cases = []
     for r in run.results:
-        cases.append(
-            {
-                "id": r.case_id,
-                "name": r.case_name,
-                "language": r.language,
-                "category": r.category,
-                "avg_score": round(r.avg_score, 2),
-                "by_criterion": {k: round(v, 2) for k, v in r.avg_by_criterion().items()},
-                "by_judge": {k: round(v, 2) for k, v in r.avg_by_judge().items()},
-                "scores": [
-                    {
-                        "judge_id": s.judge_id,
-                        "criterion": s.criterion,
-                        "score": round(s.score, 2),
-                        "reasoning": s.reasoning,
-                    }
-                    for s in r.scores
-                ],
-                "conversation": r.conversation,
-                "error": r.error,
-            }
-        )
+        case_data = {
+            "id": r.case_id,
+            "name": r.case_name,
+            "language": r.language,
+            "category": r.category,
+            "avg_score": round(r.avg_score, 2),
+            "by_criterion": {k: round(v, 2) for k, v in r.avg_by_criterion().items()},
+            "by_judge": {k: round(v, 2) for k, v in r.avg_by_judge().items()},
+            "scores": [
+                {
+                    "judge_id": s.judge_id,
+                    "criterion": s.criterion,
+                    "score": round(s.score, 2),
+                    "reasoning": s.reasoning,
+                }
+                for s in r.scores
+            ],
+            "conversation": r.conversation,
+            "error": r.error,
+        }
+        if r.target_id:
+            case_data["target_id"] = r.target_id
+        if r.response_times:
+            case_data["response_times"] = [round(t, 2) for t in r.response_times]
+            case_data["avg_response_time"] = round(r.avg_response_time, 2)
+            case_data["total_response_time"] = round(r.total_response_time, 2)
+        cases.append(case_data)
 
-    return {
+    result = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "summary": {
             k: round(v, 2) if isinstance(v, float) else v
             for k, v in summary.items()
-            if k not in ("by_judge", "by_criterion", "by_category")
+            if k not in ("by_judge", "by_criterion", "by_category", "by_target", "by_target_criterion")
         },
         "by_judge": {k: round(v, 2) for k, v in summary["by_judge"].items()},
         "by_criterion": {k: round(v, 2) for k, v in summary["by_criterion"].items()},
@@ -83,6 +88,22 @@ def _build_report_data(run: EvalRun) -> dict:
         "cases": cases,
         "errors": run.errors,
     }
+
+    # Multi-target comparison data
+    if "by_target" in summary:
+        result["by_target"] = {k: round(v, 2) for k, v in summary["by_target"].items()}
+    if "by_target_criterion" in summary:
+        result["by_target_criterion"] = {
+            tid: {crit: round(v, 2) for crit, v in crits.items()}
+            for tid, crits in summary["by_target_criterion"].items()
+        }
+    if "response_times" in summary:
+        result["response_times"] = {
+            tid: {k: round(v, 2) if isinstance(v, float) else v for k, v in stats.items()}
+            for tid, stats in summary["response_times"].items()
+        }
+
+    return result
 
 
 def _render_html(data: dict, title: str) -> str:

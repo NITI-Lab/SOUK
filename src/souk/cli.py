@@ -50,7 +50,15 @@ def main() -> None:
 @click.option("--tag", "-t", multiple=True, help="Filter by tag")
 @click.option("--output", "-o", type=click.Path(), help="Output directory for reports")
 @click.option("--case-id", help="Run a specific case by ID")
-@click.option("--judge", "-j", multiple=True, help="Override judges. Format: provider:model (e.g., openai:gpt-5.4)")
+@click.option(
+    "--judge",
+    "-j",
+    multiple=True,
+    help=(
+        "Override judges. Format: provider:model "
+        "(e.g., openai:gpt-5.4, anthropic:claude-opus-4-7, bedrock:us.anthropic.claude-haiku-4-5-20251001-v1:0)"
+    ),
+)
 def run(
     config_path: str,
     category: tuple[str, ...],
@@ -211,6 +219,47 @@ def _print_summary(summary: dict) -> None:
     evals = summary["total_evaluations"]
     dur = summary["duration_seconds"]
     console.print(f"Cases: {summary['total_cases']} | Evaluations: {evals} | Duration: {dur:.1f}s\n")
+
+    # Multi-target comparison with response times
+    if summary.get("by_target"):
+        rt = summary.get("response_times", {})
+        table = Table(title="By Target Model")
+        table.add_column("Target")
+        table.add_column("Avg Score")
+        if rt:
+            table.add_column("Avg/Turn")
+            table.add_column("Total Time")
+        for target, score in sorted(summary["by_target"].items(), key=lambda x: -x[1]):
+            row = [target, f"{score:.1f}"]
+            if rt and target in rt:
+                row.append(f"{rt[target]['avg_per_turn']:.1f}s")
+                row.append(f"{rt[target]['total']:.1f}s")
+            elif rt:
+                row.extend(["-", "-"])
+            table.add_row(*row)
+        console.print(table)
+
+    # Target × Criterion cross-tabulation
+    if summary.get("by_target_criterion"):
+        tc = summary["by_target_criterion"]
+        all_criteria = sorted({c for crits in tc.values() for c in crits})
+        table = Table(title="Target × Criterion")
+        table.add_column("Target")
+        for crit in all_criteria:
+            table.add_column(crit)
+        table.add_column("Avg", style="bold")
+
+        for target_id in sorted(tc.keys()):
+            crits = tc[target_id]
+            row = [target_id]
+            vals = []
+            for crit in all_criteria:
+                v = crits.get(crit, 0)
+                vals.append(v)
+                row.append(f"{v:.1f}")
+            row.append(f"{sum(vals) / len(vals):.1f}" if vals else "-")
+            table.add_row(*row)
+        console.print(table)
 
     if summary.get("by_judge"):
         table = Table(title="By Judge")

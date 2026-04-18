@@ -1,4 +1,4 @@
-"""Configuration management for ChatEval."""
+"""Configuration management for SOUK."""
 
 from __future__ import annotations
 
@@ -47,12 +47,21 @@ class TargetConfig(BaseModel):
     api_key: str | None = None
     base_url: str | None = None
     headers: dict[str, str] = Field(default_factory=dict)
+    system_prompt: str | None = None  # Shared system prompt for direct API targets
     extra: dict[str, Any] = Field(default_factory=dict)
 
     def resolve_api_key(self) -> str | None:
-        """Resolve API key, returning None if not needed."""
+        """Resolve API key, returning None if not needed.
+
+        Checks: explicit api_key → extra.api_key_env → provider env var convention.
+        """
         if self.api_key:
             return self.api_key
+        # Allow extra.api_key_env override (e.g., GOOGLE_API_KEY for endpoint provider)
+        if self.extra.get("api_key_env"):
+            key = os.environ.get(self.extra["api_key_env"])
+            if key:
+                return key
         env_map = {
             "openai": "OPENAI_API_KEY",
             "anthropic": "ANTHROPIC_API_KEY",
@@ -67,19 +76,32 @@ class ReportConfig(BaseModel):
 
     output_dir: str = "./reports"
     formats: list[str] = Field(default_factory=lambda: ["html", "json"])
-    title: str = "ChatEval Report"
+    title: str = "SOUK Report"
 
 
 class EvalConfig(BaseModel):
-    """Top-level evaluation configuration."""
+    """Top-level evaluation configuration.
+
+    Supports both single target (backward-compatible) and multiple targets
+    for round-robin model comparison.
+    """
 
     judges: list[JudgeConfig]
     target: TargetConfig | None = None
+    targets: list[TargetConfig] | None = None
     criteria: list[str] = Field(default_factory=lambda: ["naturalness"])
     cases_dir: str = "./cases"
     report: ReportConfig = Field(default_factory=ReportConfig)
     languages: list[str] = Field(default_factory=lambda: ["en"])
     concurrency: int = 5
+
+    def get_targets(self) -> list[TargetConfig]:
+        """Get all targets to evaluate. Supports both 'target' and 'targets' fields."""
+        if self.targets:
+            return self.targets
+        if self.target:
+            return [self.target]
+        return []
 
 
 def load_config(path: str | Path) -> EvalConfig:
